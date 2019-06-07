@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+     {% block content %}
+        <div class="clr-col-lg-9">
+
+            <div class="card">
+                <div class="card-header">
+                    <strong>Managed File Replication Assistant</strong>
+                </div>
+                <div class="card-block">
+
+                  This is the list of ddfs.info files found on the specified path: {{path}}<br><br>
+                    {{ ddfs_files }}
+                    {{ files_and_dates }}
+                    {% for key, value in files_and_dates.items() %}
+                    <dt>{{ key|e }}</dt>
+                    <dd>{{ value|e }}</dd>
+                    {% endfor %}
+                  Please select the files that you want to further analyze:
+
+                    <form class="clr-form" action="third_step.html">
+                      <table class="table">
+          <thead>
+              <tr>
+                  <th>Click to select file</th>
+                  <th>Name of the file</th>
+                  <th>From:</th>
+                  <th>To:</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
+                  <td>ddfs.info</td>
+                  <td>05/12/2019 07:23 AM</td>
+                  <td>06/12/2019 07:23 AM</td>
+              </tr>
+              <tr>
+                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
+                  <td>ddfs.info.1</td>
+                  <td>05/12/2019 07:23 AM</td>
+                  <td>06/12/2019 07:23 AM</td>
+              </tr>
+              <tr>
+                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
+                  <td>ddfs.info.2</td>
+                  <td>05/12/2019 07:23 AM</td>
+                  <td>06/12/2019 07:23 AM</td>
+              </tr>
+              <tr>
+                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
+                  <td>ddfs.info.3</td>
+                  <td>05/12/2019 07:23 AM</td>
+                  <td>06/12/2019 07:23 AM</td>
+              </tr>
+              <tr>
+                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
+                  <td>ddfs.info.4</td>
+                  <td>05/12/2019 07:23 AM</td>
+                  <td>06/12/2019 07:23 AM</td>
+              </tr>
+              <tr>
+                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
+                  <td>ddfs.info.5</td>
+                  <td>05/12/2019 07:23 AM</td>
+                  <td>06/12/2019 07:23 AM</td>
+              </tr>
+          </tbody>
+      </table>
+      <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit">ANALYZE SELECTED FILES</button></div></p>
+    </form>
+                    </form>
+                </div>
+
+            </div>
+          </div>
+          <!--<div class="clr-col-lg-4">
+          </div>-->
+      {% endblock %}

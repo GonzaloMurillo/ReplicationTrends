@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/@clr/ui/clr-ui.min.css" />
+    <title>Managed File Replication Assistant</title>
+
+  </head>
+  <body>
+
+    <div class="main-container">
+      <header class="header header-4">
+        <div class="branding">
+          <a href="index.html"><span class="branding" style="padding:15px;" tabindex="0">
+            <img src="static\DellEMC_Logo_Hz_Wht_rgb.png" style="height:80%; float:left">
+            </span>
+          </a>
+            <span class="title">&nbsp&nbsp| Managed File Replication Assistant |
+            </span>
+        </div>
+   </header>
+   <nav class="subnav">
+
+    </nav>
+
+        {% block content %}
+        <ul>
+            {% for item in dds %}
+            {% if item == "1"  %}
+            <li>{{ item }}</li>
+            {% else %}
+            <li> No es un 1 {{ item }}</li>
+
+            {% endif %}
+            {% endfor %}
+        </ul>
+
+
+        {% endblock %}
+
+
+   </div>
+
+  </body>
+</html>

@@ -10,61 +10,42 @@
                 <div class="card-block">
 
                   This is the list of ddfs.info files found on the specified path: {{path}}<br><br>
-                    {{ ddfs_files }}
-                    {{ files_and_dates }}
-                    {% for key, value in files_and_dates.items() %}
-                    <dt>{{ key|e }}</dt>
-                    <dd>{{ value|e }}</dd>
-                    {% endfor %}
+
                   Please select the files that you want to further analyze:
 
-                    <form class="clr-form" action="third_step.html">
+                    <form class="clr-form" action="{{ url_for('third_step') }}">
                       <table class="table">
           <thead>
               <tr>
-                  <th>Click to select file</th>
+                  <!--<th>Click to select file</th>-->
+                  <th>Further analysis?</th>
                   <th>Name of the file</th>
-                  <th>From:</th>
-                  <th>To:</th>
+                  <th>Time</th>
               </tr>
           </thead>
           <tbody>
+
+          {% for dict_item in files_and_dates_list %}<!-- one dict_item per analyzed ddfs file !-->
+
               <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>ddfs.info</td>
-                  <td>05/12/2019 07:23 AM</td>
-                  <td>06/12/2019 07:23 AM</td>
+
+                  {% for key, value in dict_item.items() %}  <!-- one data cell for each pair key / value !-->
+                  {% if key == "checkbox" %}
+                  <td><input type="checkbox" name="ddfsselected" checked></td>
+                  {% endif %}
+                  {% if key == "name_of_file" %}
+                  <td>{{value}}</td>
+                  {% endif %}
+                  {% if key == "start_date" %}
+                  <td>{{value}}</td>
+                  {% endif %}
+
+
+                  {% endfor %}
               </tr>
-              <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>ddfs.info.1</td>
-                  <td>05/12/2019 07:23 AM</td>
-                  <td>06/12/2019 07:23 AM</td>
-              </tr>
-              <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>ddfs.info.2</td>
-                  <td>05/12/2019 07:23 AM</td>
-                  <td>06/12/2019 07:23 AM</td>
-              </tr>
-              <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>ddfs.info.3</td>
-                  <td>05/12/2019 07:23 AM</td>
-                  <td>06/12/2019 07:23 AM</td>
-              </tr>
-              <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>ddfs.info.4</td>
-                  <td>05/12/2019 07:23 AM</td>
-                  <td>06/12/2019 07:23 AM</td>
-              </tr>
-              <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>ddfs.info.5</td>
-                  <td>05/12/2019 07:23 AM</td>
-                  <td>06/12/2019 07:23 AM</td>
-              </tr>
+
+          {% endfor %}
+
           </tbody>
       </table>
       <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit">ANALYZE SELECTED FILES</button></div></p>

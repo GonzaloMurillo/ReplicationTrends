@@ -18,7 +18,7 @@
                       <strong>Managed File Replication Assistant</strong> can help you with two types of issues: MFR failure,  and lack of performance (cloning is slow) issues.</p>
                       <p><strong>Managed File Replication Assistant</strong> needs a support bundle, please provide the path to the root path within the evidence server:</p>
                     </div>
-                    <form name="pathform" class="clr-form" action="{{ url_for('second_step') }}">
+                    <form name="pathform" class="clr-form" method="post" action="{{ url_for('second_step') }}">
                       Path to the support bundle:<input type="text" name="path" id="path" placeholder="/auto/cores/c12345" class="clr-input">
                       <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit" id="btnvalidate">OK</button><button class="btn btn-primary" type="reset">CLEAR PATH</button></div></p>
                     </form>

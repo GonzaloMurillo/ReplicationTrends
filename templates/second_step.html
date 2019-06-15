@@ -13,7 +13,9 @@
 
                   Please select the files that you want to further analyze:
 
-                    <form class="clr-form" action="{{ url_for('third_step') }}">
+                    <form class="clr-form" action="{{ url_for('third_step') }}" method="post">
+                        <input type="hidden" name="files_and_dates" value="{{files_and_dates_list}}">
+
                       <table class="table">
           <thead>
               <tr>
@@ -31,8 +33,9 @@
 
                   {% for key, value in dict_item.items() %}  <!-- one data cell for each pair key / value !-->
                   {% if key == "checkbox" %}
-                  <td><input type="checkbox" name="ddfsselected" checked></td>
+                  <td><input type="checkbox" name="{{value}}" value="{{value}}"checked></td>
                   {% endif %}
+
                   {% if key == "name_of_file" %}
                   <td>{{value}}</td>
                   {% endif %}
@@ -50,7 +53,6 @@
       </table>
       <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit">ANALYZE SELECTED FILES</button></div></p>
     </form>
-                    </form>
                 </div>
 
             </div>

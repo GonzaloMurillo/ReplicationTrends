@@ -48,8 +48,14 @@
                     <strong>Managed File Replication Assistant</strong>
                 </div>
                 <div class="card-block">
+                    Seleccionados
+                    {% for item in seleccionados %}
+                    {{ item }}
+                    {% endfor %}
 
-                  Summary operations<br><br>
+
+                    -----------------
+                    Summary operations<br><br>
                   This is a recap of the Managed File Replications that are present on the selected ddfs file(s).<br>
                   As you can see Source and Destination Data Domain Systems are displayed, together with the total number of operations happening between each pair.<br><br>
                   Just select the Managed Fie Replication pairs that you want to investigate in detail:

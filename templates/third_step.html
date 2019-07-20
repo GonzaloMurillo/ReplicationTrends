@@ -5,56 +5,90 @@
 
             <div class="card">
                 <div class="card-header">
-                    <strong>Managed File Replication Assistant</strong>
+                    <strong>Replication Graphs</strong>
                 </div>
                 <div class="card-block">
                     Seleccionados
                     {% for item in seleccionados %}
                     {{ item }}
                     {% endfor %}
-
-
-                    -----------------
-                    Summary operations<br><br>
-                  This is a recap of the Managed File Replications that are present on the selected ddfs file(s).<br>
-                  As you can see Source and Destination Data Domain Systems are displayed, together with the total number of operations happening between each pair.<br><br>
-                  Just select the Managed Fie Replication pairs that you want to investigate in detail:
-
+                
+                
+                   <p>Below you will see information about the replication contexts found in the autosupport files:</p>
+                   
                     <form class="clr-form" action="third_step.html">
                       <table class="table table-compact">
+
+        
+          <h1>Replication Context 1</h1>
+          
           <thead>
               <tr>
-                  <th>Click to select</th>
-                  <th>Source Data Domain</th>
-                  <th>Destination Data Domain</th>
-                  <th>Total # of MFR Operations</th>
-                  <th>Total # of failed operations</th>
-                  <th>Total % of failed operations</th>
-
+                  <th>Date</th>
+                  <th>Precomp written in KBi (last 24 h)</th>
+                  <th>Precomp remaining in KBi</th>
+                  <th colspan="2">REPLICATED</th>
+                  <th>Sync as of time</th>
               </tr>
+              <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Pre-comp</th>
+                    <th>Network</th>
+                    <th></th>
+                </tr>
           </thead>
           <tbody>
               <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>QAPWD2DD4500.prod.qib.loc</td>
-                  <td>QAPWD3DD4500-REP</td>
-                  <td>818 MFR operations</td>
-                  <td>2 failed MFR operation(s)</td>
-                  <td>0.25 %</td>
+                {% for dict_item in parent_dict %}
+                {% for key, value in dict_item.items() %}
+                       {% if 'DETAILS' in key %}
+                        {% for x in value %}
+                        {% for i in x %}
+                        <td>{{ i }}</td>
+                        {% endfor %}
+                        {% endfor %}
+                       {% endif %}
+               
+                {% endfor %}
+                {% endfor %}
+                  <td>2019/05/01</td>
+                  <td>2,227,815,101 KBi</td>
+                  <td>371,596,567,439 </td>
+                  <td>10,040,121,830</td>
+                  <td>10,040,121,830</td>
+                  <td>Thu Apr 18 01:00</td>       
               </tr>
               <tr>
-                  <td><input type="checkbox" clrChecbox name="ddfsfiles" value="ddfs.info"/></td>
-                  <td>QAPWD2DD4900.prod.qib.loc</td>
-                  <td>QAPWD3DD3300</td>
-                  <td>2018 MFR operations</td>
-                  <td>500 failed MFR operation(s)</td>
-                  <td style="background:red">24.77 %</td>
-              </tr>
+                <td>2019/05/01</td>
+                <td>2,227,815,101 KBi</td>
+                <td>371,596,567,439 </td>
+                <td>10,040,121,830</td>
+                <td>10,040,121,830</td>
+                <td>Thu Apr 18 01:00</td>       
+            </tr>
+            <tr>
+                <td>2019/05/01</td>
+                <td>2,227,815,101 KBi</td>
+                <td>371,596,567,439 </td>
+                <td>10,040,121,830</td>
+                <td>10,040,121,830</td>
+                <td>Thu Apr 18 01:00</td>       
+            </tr>
+                    <th>AVERAGE:</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+             
 
 
           </tbody>
       </table>
-      <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit">ANALYZE SELECTED FILES</button></div></p>
+      <img src="static/Graph.png" style="height:100%;width:100%">
+     
     </form>
                     </form>
                 </div>

@@ -88,22 +88,24 @@ def second_step():
 @app.route("/third_step",methods=['GET', 'POST'])
 def third_step():
 
-    cogido=request.form["files_and_dates"] # We take the hidden filed
-    json_acceptable_string = cogido.replace("'", "\"") # We want to convert it
+    hidden_filed_in_form=request.form["files_and_dates"] # We take the hidden filed
+    json_acceptable_string = hidden_filed_in_form.replace("'", "\"") # We want to convert it
     list_of_dicts = json.loads(json_acceptable_string) # We convert it to a list of dics
-    lista_seleccionados=[] # We want to have here just the selected
+    list_of_selected=[] # We want to have here just the selected
     path = list_of_dicts[0]['path'] # Can this produce an error?
-    for diccionarion in list_of_dicts: # For each item in the dictionary
-        for key,value in diccionarion.items():
-            if key=="checkbox": # if the key is the checkbox, we get the name (if selected)
+    for a_dic in list_of_dicts: # For each item in the dictionary
+        for key,value in a_dic.items():
+            if key=="checkbox": # if the key is the checkbox, we check if is was checked in the form
                 checked=request.form.get(value)
-                if checked:
-                    path_plus_value=path+diccionarion[key]
-                    lista_seleccionados.append(path_plus_value) # we add them to the list
+                if checked: #  we check if is was checked in the form
+                    path_plus_value=path+a_dic[key] # We just the path, plus the name of the file
+                    list_of_selected.append(path_plus_value) # we add them to the list
 
-    for x in lista_seleccionados:
+
+# Now we need to search into the files selected
+    for x in list_of_selected:
         print (x)
-    return(render_template("third_step.html",seleccionados=lista_seleccionados))
+    return(render_template("third_step.html",seleccionados=list_of_selected))
 
 if(__name__== "__main__"):
     app.run(debug=True)

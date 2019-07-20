@@ -5,13 +5,13 @@
 
             <div class="card">
                 <div class="card-header">
-                    <strong>Managed File Replication Assistant</strong>
+                    <strong>Replication Graphs</strong>
                 </div>
                 <div class="card-block">
 
-                  This is the list of ddfs.info files found on the specified path: {{path}}<br><br>
+                  This is the list of ASUP files found on the specified path: {{path}}<br><br>
 
-                  Please select the files that you want to further analyze:
+                  Please select the files that you want to include in the graphs:
 
                     <form class="clr-form" action="{{ url_for('third_step') }}" method="post">
                         <input type="hidden" name="files_and_dates" value="{{files_and_dates_list}}">
@@ -20,7 +20,7 @@
           <thead>
               <tr>
                   <!--<th>Click to select file</th>-->
-                  <th>Further analysis?</th>
+                  <th>Include this autosupport in the graphs?</th>
                   <th>Name of the file</th>
                   <th>Time</th>
               </tr>

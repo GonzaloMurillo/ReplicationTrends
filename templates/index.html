@@ -6,21 +6,21 @@
 
             <div class="card">
                 <div class="card-header">
-                    <strong>Welcome to Managed File Replication Assistant</strong>
+                    <strong>Welcome to Replication Graphs</strong>
                 </div>
                 <div class="card-block">
                     <div class="card-title">
-                        What is Managed File Replication Assistant?
+                        What is Replication Graphs?
 
                     </div>
                     <div class="card-text">
-                      <p><strong>Managed File Replication Assistant</strong> is a tool which main purpose is to assist NET TSEs with Managed File Replication issues.
-                      <strong>Managed File Replication Assistant</strong> can help you with two types of issues: MFR failure,  and lack of performance (cloning is slow) issues.</p>
-                      <p><strong>Managed File Replication Assistant</strong> needs a support bundle, please provide the path to the root path within the evidence server:</p>
+                      <p><strong>Replication Graphs</strong> is a tool which main purpose is to assist NET TSEs with Mtree replication issues.</p>
+                     <p><strong>Replication Graphs</strong> plots the information about replication contexts that comes in the autosupport files, so you can detect anomalies and trends over time.</p>
+                      <p><strong>Let´s start by providing the path to the autosupport files:</p>
                     </div>
                     <form name="pathform" class="clr-form" method="post" action="{{ url_for('second_step') }}">
-                      Path to the support bundle:<input type="text" name="path" id="path" placeholder="/auto/cores/c12345" class="clr-input">
-                      <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit" id="btnvalidate">OK</button><button class="btn btn-primary" type="reset">CLEAR PATH</button></div></p>
+                    Path to the autosupport files:<input type="text" name="autosupports_path" id="autosupports_path" placeholder=".../ddr/var/support" class="clr-input">
+                    <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit" id="btnvalidate">OK</button><button class="btn btn-primary" type="reset">CLEAR PATH</button></div></p>
                     </form>
                 </div>
 

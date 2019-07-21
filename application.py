@@ -102,6 +102,7 @@ def second_step():
 @app.route("/third_step",methods=['GET', 'POST'])
 def third_step():
     lista_de_listas=[]
+    num_contexts=0
     hidden_filed_in_form=request.form["files_and_dates"] # We take the hidden filed
     json_acceptable_string = hidden_filed_in_form.replace("'", "\"") # We want to convert it
     list_of_dicts = json.loads(json_acceptable_string) # We convert it to a list of dics
@@ -130,23 +131,29 @@ def third_step():
         contexts_dic['ASUP_FILE']=autosupport
         contexts_dic['GENERATED_ON']=generated_on
         contexts_dic['DETAILS']=list_of_contexts_in_asup
+        num_contexts=len(list_of_contexts_in_asup) # We store here the number of contexts
         contexts_dic_list.append(contexts_dic)
         list_of_contexts_in_asup=[]
         contexts_dic={}
         
     print("El diccionario de contextos {}".format(contexts_dic_list))
     log=contexthelper.ContextHelper()
-    context_one=log.give_me_a_list_for_context(3,contexts_dic_list)
-    context_two=log.give_me_a_list_for_context(5,contexts_dic_list)
+    print("numero de contextos:{}".format(num_contexts))
+    context_one=log.give_me_a_list_for_context(1,contexts_dic_list)
+    context_two=log.give_me_a_list_for_context(2,contexts_dic_list)
+    context_three=log.give_me_a_list_for_context(3,contexts_dic_list)
+    context_four=log.give_me_a_list_for_context(4,contexts_dic_list)
 
     lista_de_listas.append(context_one)
     lista_de_listas.append(context_two)
+    lista_de_listas.append(context_three)
+    lista_de_listas.append(context_four)
 
     print("Lista de listas: {}".format(lista_de_listas))
                     
             
     print("Lo que le vamos a pasar al template engine {}".format(context_one))
-    return(render_template("third_step.html",context=context_two))
+    return(render_template("third_step.html",lista_de_listas=lista_de_listas))
 
 if(__name__== "__main__"):
     app.run(debug=True)

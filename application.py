@@ -118,7 +118,7 @@ def third_step():
     replication_data=[]
     contexts_dic={}
     contexts_dic_list=[]
-    mar=1
+   
     # Now we need to search into the files selected
     for autosupport in list_of_selected_asups:
 
@@ -146,7 +146,7 @@ def third_step():
                         context_one.append(details)
                         
     print("Lo que le vamos a pasar al template engine {}".format(context_one))
-    return(render_template("third_step.html",parent_dict=contexts_dic_list))
+    return(render_template("third_step.html",context=context_one))
 
 if(__name__== "__main__"):
     app.run(debug=True)

@@ -24,59 +24,39 @@
           
           <thead>
               <tr>
-                  <th>Date</th>
+                  <th>Asup Date</th>
+                  <th>Ctx Number</th>
                   <th>Precomp written in KBi (last 24 h)</th>
                   <th>Precomp remaining in KBi</th>
                   <th colspan="2">REPLICATED</th>
+                  <th>Low bw opt</th>
                   <th>Sync as of time</th>
               </tr>
+              
               <tr>
+
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>
                     <th>Pre-comp</th>
                     <th>Network</th>
                     <th></th>
+                    <th></th>
                 </tr>
           </thead>
           <tbody>
+                {% for value in context%} 
               <tr>
-                {% for dict_item in parent_dict %}
-                {% for key, value in dict_item.items() %}
-                       {% if 'DETAILS' in key %}
-                        {% for x in value %}
-                        {% for i in x %}
-                        <td>{{ i }}</td>
-                        {% endfor %}
-                        {% endfor %}
-                       {% endif %}
-               
-                {% endfor %}
-                {% endfor %}
-                  <td>2019/05/01</td>
-                  <td>2,227,815,101 KBi</td>
-                  <td>371,596,567,439 </td>
-                  <td>10,040,121,830</td>
-                  <td>10,040,121,830</td>
-                  <td>Thu Apr 18 01:00</td>       
+                
+                    {% for i in value %}
+                  <td>{{ i }}</td>
+                {% endfor %}  
               </tr>
-              <tr>
-                <td>2019/05/01</td>
-                <td>2,227,815,101 KBi</td>
-                <td>371,596,567,439 </td>
-                <td>10,040,121,830</td>
-                <td>10,040,121,830</td>
-                <td>Thu Apr 18 01:00</td>       
-            </tr>
-            <tr>
-                <td>2019/05/01</td>
-                <td>2,227,815,101 KBi</td>
-                <td>371,596,567,439 </td>
-                <td>10,040,121,830</td>
-                <td>10,040,121,830</td>
-                <td>Thu Apr 18 01:00</td>       
-            </tr>
+              {% endfor %}
                     <th>AVERAGE:</th>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>

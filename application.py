@@ -3,6 +3,7 @@
 
 from flask import Flask, render_template, request
 from auxiliar import replicationgraphs
+from auxiliar import contexthelper
 import os
 import glob
 import gzip
@@ -100,7 +101,7 @@ def second_step():
 
 @app.route("/third_step",methods=['GET', 'POST'])
 def third_step():
-
+    lista_de_listas=[]
     hidden_filed_in_form=request.form["files_and_dates"] # We take the hidden filed
     json_acceptable_string = hidden_filed_in_form.replace("'", "\"") # We want to convert it
     list_of_dicts = json.loads(json_acceptable_string) # We convert it to a list of dics
@@ -134,19 +135,18 @@ def third_step():
         contexts_dic={}
         
     print("El diccionario de contextos {}".format(contexts_dic_list))
-    context_one=[]   
-    for dic in contexts_dic_list: # context_dic_list is a list of dics each one containing the info from an asup file
-        for key,value in dic.items(): #dic is a dictionary
-            if 'GENERATED_ON' in key:
-                generated_on=value
-            if 'DETAILS' in key:
-                for details in value: # details is a list with the details of each replication context
-                    if int(details[0])==1: # the first item of the list details is the replication ctx number
-                        details.insert(0,generated_on)
-                        context_one.append(details)
-                        
+    log=contexthelper.ContextHelper()
+    context_one=log.give_me_a_list_for_context(3,contexts_dic_list)
+    context_two=log.give_me_a_list_for_context(5,contexts_dic_list)
+
+    lista_de_listas.append(context_one)
+    lista_de_listas.append(context_two)
+
+    print("Lista de listas: {}".format(lista_de_listas))
+                    
+            
     print("Lo que le vamos a pasar al template engine {}".format(context_one))
-    return(render_template("third_step.html",context=context_one))
+    return(render_template("third_step.html",context=context_two))
 
 if(__name__== "__main__"):
     app.run(debug=True)

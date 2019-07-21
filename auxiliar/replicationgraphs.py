@@ -1,5 +1,6 @@
 
 class LogParser():
+    
     def __init__(self,file_name,start_string,stop_string):
         self.file_name=file_name
         self.start_string=start_string
@@ -69,3 +70,5 @@ class LogParser():
         print("Actual data to plot:\n")
         print(data_to_plot)	
         return data_to_plot
+
+    

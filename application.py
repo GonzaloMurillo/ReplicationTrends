@@ -135,7 +135,7 @@ def third_step():
         
     print("El diccionario de contextos {}".format(contexts_dic_list))
     context_one=[]   
-    for dic in contexts_dic_list: # context_dic_list is a list of dics
+    for dic in contexts_dic_list: # context_dic_list is a list of dics each one containing the info from an asup file
         for key,value in dic.items(): #dic is a dictionary
             if 'GENERATED_ON' in key:
                 generated_on=value

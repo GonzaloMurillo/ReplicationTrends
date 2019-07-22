@@ -1,3 +1,3 @@
 Replication Graphs:
 
-A tool by Genius Gonzalo
+A tool by Gonzalo Murillo

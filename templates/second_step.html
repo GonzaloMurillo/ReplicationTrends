@@ -14,7 +14,7 @@
                   Please select the files that you want to include in the graphs:
 
                     <form class="clr-form" action="{{ url_for('third_step') }}" method="post">
-                        <input type="hidden" name="files_and_dates" value="{{files_and_dates_list}}">
+                        <input type="hidden" name="files_and_dates" value="{{files_and_dates_ld}}">
 
                       <table class="table">
           <thead>
@@ -27,7 +27,7 @@
           </thead>
           <tbody>
 
-          {% for dict_item in files_and_dates_list %}<!-- one dict_item per analyzed ddfs file !-->
+          {% for dict_item in files_and_dates_ld %}<!-- one dict_item per analyzed ddfs file !-->
 
               <tr>
 

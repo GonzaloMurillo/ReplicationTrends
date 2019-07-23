@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+<!-- for a good tutorial on Jinja Template, check:
+  https://overiq.com/flask-101/basics-of-jinja-template-language/
+-->
+
+
         {% block content %}
         <div class="clr-col-lg-11">
 
@@ -50,24 +55,67 @@
                 {% for value in lista_actual%} 
               <tr>
                 
+                {%if loop.last %}
+                {% for column in value %}
+                <td bgcolor="#99ccff"><strong>{{ column }}</strong></td>
+                {% endfor %}  <!-- In this bucle we print all the columns of repl ctx-->
+
+                {% else %}
                     {% for column in value %}
                     <td>{{ column }}</td>
                     {% endfor %}  <!-- In this bucle we print all the columns of repl ctx-->
               </tr>
-              
+              {% endif %}
               {% endfor %} <!--Here it finish info about one replication context-->
-             
-                    <th>AVERAGE:</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+              
+              
                   </tbody>
                 </table>
-                <img src="static/Graph.png" style="height:100%;width:100%">
+                {% if loop.index0 == 0 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.0 }}</strong></p>
+              {% endif %}
+              {% if loop.index0 == 1 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.1 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 2 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.2 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 3 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.3 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 4 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.4 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 5 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.5 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 6 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.6 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 7 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.7 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 8 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.8 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 9 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.9 }} </p>
+              
+              {% endif %}
+              {% if loop.index0 == 10 %}
+              <p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.10 }} </p>
+              
+              {% endif %}
+
+                <!--<img src="static/Graph.png" style="height:100%;width:100%">-->
                 <br>
               {% endfor %}
                     

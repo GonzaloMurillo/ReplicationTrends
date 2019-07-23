@@ -128,7 +128,7 @@ def second_step():
 
 @app.route("/third_step",methods=['GET', 'POST'])
 def third_step():
-    
+    replication_in_sync_estimation=[]    
     # info_of_contexts_in_asups will be a list of lists, where each item on the list
     # will be all the information for an specific context in all the asups files analyzed
     # so info_of_contexts_in_asups[0] will for example contain all the information of one
@@ -179,9 +179,10 @@ def third_step():
     # [['1', '2,227,815,101', '371,596,567,439', '0', '0', '0.00', 'Wed Dec 5 01:00'], ['2', '4,833,505,928', '937,430,050,087', '0', '0', '0.00', 'Thu Nov 29 01:00'], ['3', '4,833,505,928', '82,860,672,773', '10,040,121,830', '151,923,216', '1.00', 'Thu Apr 18 01:00'], ['4', '2,227,815,101', '0', '2,208,978,412', '26,421,227', '1.00', 'Wed May 1 11:55']]
 
     contexts_dic_list=[]
-   
+    asup_number = 0
     # Now we need to search into the files selected, to obtain the Replication Data Transferred over 24 hours
     for autosupport in list_of_selected_asups:
+        asup_number = asup_number + 1 # To keep track later of the autosupport that we are processing, specially if is the latest
         # Just a call to the Constructor of the LogParser
         log_parser=logparser.LogParser(autosupport,'Replication Data Transferred over 24hr','Replication Detailed History')
         generated_on=log_parser.get_generated_on() # We obtain the GENERATED_ON string on the ASUP file
@@ -213,7 +214,7 @@ def third_step():
         # to avoid messing it up
         list_of_contexts_in_asup=[] 
         contexts_dic={}
-        
+    # Here I have received the info from ALL autosupports    
     # Call to the constructor of ContextHelper
     log=contexthelper.ContextHelper()
     # Context by number is just a list that contains the contexts numbers in the asup files
@@ -222,14 +223,45 @@ def third_step():
     
     # Now for each context number
     for ctx_number in context_by_number:
+        
         # Here a lot of good things happen
         # info_of_contexts_in_asups will be a list of list
         # where each item is a list with all the info in all the asups for one specific context
         # we need to thank you to the function give_me_a_list_for_context
-        info_of_contexts_in_asups.append(log.give_me_a_list_for_context(ctx_number,contexts_dic_list))
+        list_for_context=log.give_me_a_list_for_context(ctx_number,contexts_dic_list)
+        # This is for calculating averages for each context
+       
+        calculated_averages=list(log.calculate_averages(list_for_context)) # This is a tuple converted to list
+        calculated_averages.insert(0,"AVERAGE")
+        calculated_averages.insert(1,"") # In the average this field is the context number, so we do not want to print anything
+        calculated_averages.insert(6,"") #Low bw opt, so we do not want to print anything
+        calculated_averages.insert(7,"") #Sync as of time, so we do not want to print anything
+
+        list_for_context.append(calculated_averages) # We add the average to the metrics
+       
+        info_of_contexts_in_asups.append(list_for_context) # We add all the info together for this context
+   
     
+        dividend=int(list_for_context[0][3].replace(",","")) # precomp remaining
+        
+        if(len(calculated_averages)==8): # if calculated_averages==8 it means that the context is initializing
+            divisor=int(calculated_averages[4].replace(",",""))  # Precomp transmited in 24 hrs 
+        
+            if(divisor > 0):
+                how_many_hours=dividend / divisor
+            else:
+                how_many_hours=-1
+            if(how_many_hours ==-1):
+                replication_in_sync_estimation.append("Warning! This replication context seems that will never catch up.")
+            elif (how_many_hours!=0):
+                replication_in_sync_estimation.append("Considering the average metrics, this content will take {:.2f} days to catch up. ".format(how_many_hours))
+            elif (how_many_hours==0):
+                replication_in_sync_estimation.append("This replication context is in sync".format(how_many_hours))
+          
+
+
    # And here we print the third_step template
-    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups))
+    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation=replication_in_sync_estimation))
 
 if(__name__== "__main__"):
     app.run(debug=True)

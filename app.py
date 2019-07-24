@@ -235,8 +235,9 @@ def third_step():
 
         # Now we create the plot for this context
 
-        graph=plotter.Plotter(list_for_context,ctx_number)
-        print()
+        graph=plotter.Plotter()
+        name_of_graph_file=graph.plot(list_for_context,ctx_number)
+        graphs.append(name_of_graph_file) # We add to the list of all graphs, this particular graph
         # This is for calculating averages for each context
        
         calculated_averages=list(log.calculate_averages(list_for_context)) # This is a tuple converted to list
@@ -270,7 +271,7 @@ def third_step():
              
 
    # And here we print the third_step template
-    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation=replication_in_sync_estimation))
+    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation=replication_in_sync_estimation,graphs=graphs))
 
 if(__name__== "__main__"):
     app.run(debug=True)

@@ -4,6 +4,7 @@
 from flask import Flask, render_template, request
 from auxiliar import logparser
 from auxiliar import contexthelper
+from auxiliar import plotter
 import os
 import glob
 import gzip
@@ -179,7 +180,9 @@ def third_step():
     # [['1', '2,227,815,101', '371,596,567,439', '0', '0', '0.00', 'Wed Dec 5 01:00'], ['2', '4,833,505,928', '937,430,050,087', '0', '0', '0.00', 'Thu Nov 29 01:00'], ['3', '4,833,505,928', '82,860,672,773', '10,040,121,830', '151,923,216', '1.00', 'Thu Apr 18 01:00'], ['4', '2,227,815,101', '0', '2,208,978,412', '26,421,227', '1.00', 'Wed May 1 11:55']]
 
     contexts_dic_list=[]
-    asup_number = 0
+
+    asup_number = 0 # number of asup being processed
+    graphs = [] # A list that will contain the name of all the graphs for each replication context
     # Now we need to search into the files selected, to obtain the Replication Data Transferred over 24 hours
     for autosupport in list_of_selected_asups:
         asup_number = asup_number + 1 # To keep track later of the autosupport that we are processing, specially if is the latest
@@ -229,6 +232,11 @@ def third_step():
         # where each item is a list with all the info in all the asups for one specific context
         # we need to thank you to the function give_me_a_list_for_context
         list_for_context=log.give_me_a_list_for_context(ctx_number,contexts_dic_list)
+
+        # Now we create the plot for this context
+
+        graph=plotter.Plotter(list_for_context,ctx_number)
+        print()
         # This is for calculating averages for each context
        
         calculated_averages=list(log.calculate_averages(list_for_context)) # This is a tuple converted to list
@@ -240,7 +248,8 @@ def third_step():
         list_for_context.append(calculated_averages) # We add the average to the metrics
        
         info_of_contexts_in_asups.append(list_for_context) # We add all the info together for this context
-   
+    
+
     
         dividend=int(list_for_context[0][3].replace(",","")) # precomp remaining
         
@@ -252,13 +261,13 @@ def third_step():
             else:
                 how_many_hours=-1
             if(how_many_hours ==-1):
-                replication_in_sync_estimation.append("Warning! This replication context seems that will never catch up.")
+                replication_in_sync_estimation.append("Warning! Based on the current metrics, this replication context will never catch up.")
             elif (how_many_hours!=0):
-                replication_in_sync_estimation.append("Considering the average metrics, this content will take {:.2f} days to catch up. ".format(how_many_hours))
+                replication_in_sync_estimation.append("This content will take {:.2f} days to catch up (based on the average metrics).".format(how_many_hours))
             elif (how_many_hours==0):
                 replication_in_sync_estimation.append("This replication context is in sync".format(how_many_hours))
           
-
+             
 
    # And here we print the third_step template
     return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation=replication_in_sync_estimation))

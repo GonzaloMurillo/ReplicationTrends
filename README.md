@@ -1,4 +1,3 @@
-Replication Graphs:
+Replication Trends:
 
-A tool by Gonzalo Murillo tellov fff
-dd
+A tool created by Gonzalo Murillo Tello, to read information from the autosupports, and create graphs with the replication trends.

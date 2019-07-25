@@ -11,6 +11,7 @@ import gzip
 import re
 import json
 import ast
+import natsort
 
 app = Flask(__name__)
 
@@ -63,6 +64,8 @@ def second_step():
             autosupport_files.append(file)
     except Exception as e:
         print(e)
+
+    
   
     # If we do not find any autosupport file
     # Then we display an error message
@@ -70,7 +73,12 @@ def second_step():
     if(len(autosupport_files)==0):
         return(render_template('error.html',error_code="The specified path does not contain autosupport files. Please go back and specify a path containing autosupport files."))
         #raise Exception("No autosupport files")
- 
+    # We need to order the asup files, because if the number of asup files is high
+    # we can end up with a situation like this one: autosupport autosupport.1 autosupport.12 autosupport.2
+    # that autosupport.12 is clearly incorrect. I got lazy and found a module that makes this natsort
+    #https://stackoverflow.com/questions/33159106/sort-filenames-in-directory-in-ascending-order?lq=1
+    autosupport_files = natsort.natsorted(autosupport_files)
+
     # Now we need to open every file to obtain its generated date
     for index,f in enumerate(autosupport_files): 
         # The could be two types of autosupport files
@@ -212,6 +220,8 @@ def third_step():
         # on this particular ASUP to context_dic_list
         # So context_dic_list will contain the replication information contained in all the selected ASUPs
         contexts_dic_list.append(contexts_dic) 
+
+
         
         # Because we iterate, we need to reset this two variables
         # to avoid messing it up

@@ -10,18 +10,20 @@
 
             <div class="card">
                 <div class="card-header">
-                    <strong>Replication Graphs</strong>
+                    <strong>Replication Trends | Report Section</strong>
                 </div>
                 <div class="card-block">
                              
                 
-                   <p>Below you will see information about the replication contexts found in the selected autosupport files.</p>  
+                   <!--<p>Below you will see information about the replication contexts found in the selected autosupport files.</p>  -->
                    
                     <form class="clr-form" action="third_step.html">
                       
           
-          
-          
+          {% if info_of_contexts_in_asups|length == 0 %}
+          <h4>There is no information about replication on the provided ASUP files.</h4>
+          <h4>Is replication configured in the provided autosupports files?</h4>
+          {% endif %}
           
               {% for lista_actual in info_of_contexts_in_asups %}
               <h2>Replication Context {{lista_actual.1.1}}</h2>
@@ -72,117 +74,87 @@
                   </tbody>
                 </table>
                 {% if loop.index0 == 0 %}
-                {% if 'Warning' in  replication_in_sync_estimation.0 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.0 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.0 }}</strong></p>
-                {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
-                <br>
-                {% endif %}
                 
-
-              {% if loop.index0 == 1 %}
-                {% if 'Warning' in  replication_in_sync_estimation.1 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.1 }}</strong></p>
+                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.0 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.0 }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.1 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.0 }}</strong></p>
                 {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
+                <img src="static/{{graphs.0}}.png" width="100%">
+                <br>
+                
+                {% if 'Warning' in  replication_in_sync_estimation_with_ingest.0 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.0 }}</strong></p>
+                {% else %}
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.0 }}</strong></p>
+                {% endif %}
+                <img src="static/{{graphs.0}}.png" width="100%">
+                <br>
+
+
+                {% endif %}
+
+                {% if loop.index0 == 1 %}
+                
+                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.1 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.1 }}</strong></p>
+                {% else %}
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.1 }}</strong></p>
+                {% endif %}
+                <img src="static/{{graphs.1}}.png" width="100%">
                 <br>
                 {% endif %}
 
                 {% if loop.index0 == 2 %}
-                {% if 'Warning' in  replication_in_sync_estimation.2 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.2 }}</strong></p>
+                
+                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.2 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.2 }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.2 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.2 }}</strong></p>
                 {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
+                <img src="static/{{graphs.2}}.png" width="100%">
                 <br>
                 {% endif %}
 
                 {% if loop.index0 == 3 %}
-                {% if 'Warning' in  replication_in_sync_estimation.3 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.3 }}</strong></p>
+                
+                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.3 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.3 }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.3 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.3 }}</strong></p>
                 {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
+                <img src="static/{{graphs.3}}.png" width="100%">
                 <br>
                 {% endif %}
 
                 {% if loop.index0 == 4 %}
-                {% if 'Warning' in  replication_in_sync_estimation.4 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.4 }}</strong></p>
+                
+                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.4 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.4 }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.4 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.4 }}</strong></p>
                 {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
+                <img src="static/{{graphs.4}}.png" width="100%">
                 <br>
                 {% endif %}
 
                 {% if loop.index0 == 5 %}
-                {% if 'Warning' in  replication_in_sync_estimation.4 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.5 }}</strong></p>
+                
+                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.5 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.5 }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.5 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.5 }}</strong></p>
                 {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
+                <img src="static/{{graphs.5}}.png" width="100%">
                 <br>
                 {% endif %}
 
-                {% if loop.index0 == 6 %}
-                {% if 'Warning' in  replication_in_sync_estimation.6 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.6 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.6 }}</strong></p>
-                {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
-                <br>
-                {% endif %}
-
-                {% if loop.index0 == 7 %}
-                {% if 'Warning' in  replication_in_sync_estimation.7 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.7 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.7 }}</strong></p>
-                {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
-                <br>
-                {% endif %}
-
-                {% if loop.index0 == 8 %}
-                {% if 'Warning' in  replication_in_sync_estimation.8 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.8 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.8 }}</strong></p>
-                {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
-                <br>
-                {% endif %}
-
-                {% if loop.index0 == 9 %}
-                {% if 'Warning' in  replication_in_sync_estimation.9 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.9 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.9 }}</strong></p>
-                {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
-                <br>
-                {% endif %}
-
-                {% if loop.index0 == 10 %}
-                {% if 'Warning' in  replication_in_sync_estimation.10 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation.10 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation.10 }}</strong></p>
-                {% endif %}
-                <img src="static/Graph.png" style="height:100%;width:100%">
-                <br>
-                {% endif %}
 
                 
+
+                
+
+
 
               {% endfor %}
                     

@@ -137,7 +137,7 @@ def second_step():
 
 @app.route("/third_step",methods=['GET', 'POST'])
 def third_step():
-    replication_in_sync_estimation=[]    
+       
     # info_of_contexts_in_asups will be a list of lists, where each item on the list
     # will be all the information for an specific context in all the asups files analyzed
     # so info_of_contexts_in_asups[0] will for example contain all the information of one
@@ -233,7 +233,12 @@ def third_step():
     # Context by number is just a list that contains the contexts numbers in the asup files
     # TODO. What would happen if all the asups do not contain the same num of contexts?
     context_by_number=log.give_me_a_list_with_context_numbers(contexts_dic_list) 
-    
+    # replication_in_sync_estimation_without_ingest is how long it will take to replicate if we stop the ingest         
+    replication_in_sync_estimation_without_ingest = []
+
+    # replication_in_sync_wit_ingest is how long it will take to replicate if we DO NOT stop the ingest         
+  
+    replication_in_sync_with_ingest = []
     # Now for each context number
     for ctx_number in context_by_number:
         
@@ -261,27 +266,39 @@ def third_step():
         info_of_contexts_in_asups.append(list_for_context) # We add all the info together for this context
     
 
-    
-        dividend=int(list_for_context[0][3].replace(",","")) # precomp remaining
+        # All the variables below are referred to the latest 24 hrs
+        pre_comp_written=int(list_for_context[0][2].replace(",","")) 
+        precomp_remaining=int(list_for_context[0][3].replace(",",""))
+        replicated_precomp=int(list_for_context[0][4].replace(",",""))
+        replicated_network=int(list_for_context[0][5].replace(",",""))
+        
         
         if(len(calculated_averages)==8): # if calculated_averages==8 it means that the context is initializing
-            divisor=int(calculated_averages[4].replace(",",""))  # Precomp transmited in 24 hrs 
-        
-            if(divisor > 0):
-                how_many_hours=dividend / divisor
+           
+            
+            
+            if(replicated_precomp > 0):
+                how_many_hours=precomp_remaining / pre_comp_written  
             else:
                 how_many_hours=-1
             if(how_many_hours ==-1):
-                replication_in_sync_estimation.append("Warning! Based on the current metrics, this replication context will never catch up.")
+                replication_in_sync_estimation_without_ingest.append("Warning! Based on the current metrics, this replication context will never catch up.")
             elif (how_many_hours!=0):
-                replication_in_sync_estimation.append("This content will take {:.2f} days to catch up (based on the average metrics).".format(how_many_hours))
+                replication_in_sync_estimation_without_ingest.append("If we STOP the ingest pre-comp (no backup), this content will take {:.2f} days to catch up (based on the average metrics).".format(how_many_hours))
             elif (how_many_hours==0):
-                replication_in_sync_estimation.append("This replication context is in sync".format(how_many_hours))
+                replication_in_sync_estimation_without_ingest.append("This replication context is in sync")
+          
+          # What happens if we consider the ingest backup
+            if(pre_comp_written>=replicated_precomp): # We ingest each 24 hr more than we are able to replicate
+                replication_in_sync_with_ingest.append("Warning! We ingest more data daily that what we are able to replicate. This will never catch up")
+            elif (pre_comp_written<replicated_precomp):
+                how_many_hours = (precomp_remaining + pre_comp_written) / replicated_precomp
+                replication_in_sync_with_ingest.append("If we STOP the ingest pre-comp (no backup), this content will take {:.2f} days to catch up (based on the average metrics).".format(how_many_hours))
           
              
 
    # And here we print the third_step template
-    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation=replication_in_sync_estimation,graphs=graphs))
+    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation_without_ingest=replication_in_sync_estimation_without_ingest,replication_in_sync_estimation_with_ingest=replication_in_sync_with_ingest,graphs=graphs))
 
 if(__name__== "__main__"):
     app.run(debug=True)

@@ -103,7 +103,7 @@ def second_step():
         # Regular expression for catching the time in the autosupport log
         regexp = r'GENERATED_ON=.*' # We want to search for the GENERATED_ON, on the autosupport files.
         #regexp = r'[0-9][0-9]/[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]'
-
+        
         for line in file:
             
             matchObj = re.match(regexp, line)  # Does it match what we search at the start of the line?
@@ -120,15 +120,15 @@ def second_step():
                 break
         
 
-            # If after checking all the files, we have not found a GENERATED_ON line
-            # then we do know the date
-    if(not found):
-        files_and_dates["checkbox"] = os.path.basename(autosupport_files[index])
-        files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
-        files_and_dates["start_date"] = "UNKNOWN"
-        files_and_dates["path"] = autosupports_path
-        files_and_dates_ld.append(files_and_dates)
-        files_and_dates = {}  # Destroy the object, as we are going to use in the next bucle iteration
+        # If after checking all the lines, we have not found a GENERATED_ON line
+        # then we do know the date
+        if(not found):
+            files_and_dates["checkbox"] = "INVALID" # On the template, we will search for this field an uncheck the INVALIDS
+            files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
+            files_and_dates["start_date"] = "INVALID ASUP"
+            files_and_dates["path"] = autosupports_path
+            files_and_dates_ld.append(files_and_dates)
+            files_and_dates = {}  # Destroy the object, as we are going to use in the next bucle iteration
 
     # We render the Jinja Template
     return render_template('second_step.html',path = autosupports_path,autosupport_files = autosupport_files,files_and_dates_ld=files_and_dates_ld)
@@ -238,7 +238,7 @@ def third_step():
 
     # replication_in_sync_wit_ingest is how long it will take to replicate if we DO NOT stop the ingest         
   
-    replication_in_sync_with_ingest = []
+    replication_in_sync_estimation_with_ingest = []
     # Now for each context number
     for ctx_number in context_by_number:
         
@@ -281,31 +281,29 @@ def third_step():
             replicated_network_avg=int(calculated_averages[5].replace(",",""))
             
             if(precomp_remaining != 0):
-                
+                # Just simply estimation considering there is no ingest 
+                # how_many_days = precomp_remaining / replicated_precomp_avg
                 if(replicated_precomp_avg > 0):
-                    how_many_hours=precomp_remaining / replicated_precomp_avg  
-                elif (replicated_precomp_avg == 0 and precomp_remaining > 0):
-                   how_many_hours=-1
-                if(how_many_hours ==-1):
-                    replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this replication context will never be in sync, as we do not replicate data.")
-                elif (how_many_hours!=0):
+                    how_many_hours=(precomp_remaining / replicated_precomp_avg ) *24
                     replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this content will take {:.2f} days to be in sync (based on the average metrics).".format(how_many_hours))
-            
+                elif (replicated_precomp_avg == 0 and precomp_remaining > 0):
+                    replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this replication context will probably never be in sync, as we do not replicate data.")
+                
                  # What happens if we consider the ingest backup
-            
-                            
-                if(precomp_written_avg>=replicated_precomp_avg): # We ingest each 24 hr more than we are able to replicate
-                    replication_in_sync_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this context will never be in sync, as we ingest more data daily than what we are able to replicate daily.")
-                elif (precomp_written_avg<replicated_precomp_avg and replicated_precomp_avg > 0):
-                    how_many_hours = (precomp_remaining + precomp_written_avg) / replicated_precomp_avg 
-                    replication_in_sync_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this content will take {:.2f} days to be in sync (based on the average metrics).".format(how_many_hours))
-          
+                 # how_many_hours=(Precomp remaining in KBi+AvgPrecomp written in KBi (last 24 h) ) / Replicated Precomp
+               
+                if(replicated_precomp_avg > 0 ):
+                    how_many_hours = ((precomp_remaining + precomp_written_avg) / replicated_precomp_avg ) *24
+                    replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this content will take {:.2f} days to be in sync (based on the average metrics).".format(how_many_hours))
+                elif (replicated_precomp_avg==0 and precomp_remaining > 0): # It is not replicating anything
+                     replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this replication context will probably never be in sync, as we do not replicate data.")
+
             else: # pre-comp remaining is 0
                 replication_in_sync_estimation_without_ingest.append("This replication context is in sync")
-                replication_in_sync_with_ingest.append("This replication context is in sync")
+                replication_in_sync_estimation_with_ingest.append("This replication context is in sync")
 
    # And here we print the third_step template
-    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation_without_ingest=replication_in_sync_estimation_without_ingest,replication_in_sync_estimation_with_ingest=replication_in_sync_with_ingest,graphs=graphs))
+    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation_without_ingest=replication_in_sync_estimation_without_ingest,replication_in_sync_estimation_with_ingest=replication_in_sync_estimation_with_ingest,graphs=graphs))
 
 if(__name__== "__main__"):
     app.run(debug=True)

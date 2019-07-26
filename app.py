@@ -285,7 +285,7 @@ def third_step():
                 # how_many_days = precomp_remaining / replicated_precomp_avg
                 if(replicated_precomp_avg > 0):
                     how_many_hours=(precomp_remaining / replicated_precomp_avg ) *24
-                    replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this content will take {:.2f} days to be in sync (based on the average metrics).".format(how_many_hours))
+                    replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this content will take {:.2f} hours to be in sync (based on the average metrics).".format(how_many_hours))
                 elif (replicated_precomp_avg == 0 and precomp_remaining > 0):
                     replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this replication context will probably never be in sync, as we do not replicate data.")
                 
@@ -294,7 +294,7 @@ def third_step():
                
                 if(replicated_precomp_avg > 0 ):
                     how_many_hours = ((precomp_remaining + precomp_written_avg) / replicated_precomp_avg ) *24
-                    replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this content will take {:.2f} days to be in sync (based on the average metrics).".format(how_many_hours))
+                    replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this content will take {:.2f} hours to be in sync (based on the average metrics).".format(how_many_hours))
                 elif (replicated_precomp_avg==0 and precomp_remaining > 0): # It is not replicating anything
                      replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this replication context will probably never be in sync, as we do not replicate data.")
 

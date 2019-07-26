@@ -21,8 +21,8 @@
                       
           
           {% if info_of_contexts_in_asups|length == 0 %}
-          <h4>There is no consistent information about replication contexts on the provided ASUP files.</h4>
-          <h4>All autosupport files selected need to contain information about the same replication contexts.</h4>
+          <h4>Some of the checked autosupports do not have "Replication Data Transferred over 24hr" information.</h4>
+          <h4>Please go back an unselect those ASUP files.</h4>
           {% endif %}
           
               {% for lista_actual in info_of_contexts_in_asups %}

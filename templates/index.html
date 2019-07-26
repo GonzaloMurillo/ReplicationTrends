@@ -18,7 +18,7 @@
                      <p><strong>Replication Trends</strong> plots a fancy graph for every context, and can estimate when a context will be in sync.</p>
                       <p><strong>Please start by providing the path to the autosupport files within the evidence server, something like: /auto/cores/cxx/ddr/var/support</p>
                     </div>
-                    <form name="pathform" class="clr-form" method="post" action="{{ url_for('second_step') }}">
+                    <form name="pathform" class="clr-form" method="post" action="{{ url_for('second_step').strip('/') }}">
                     Path to the autosupport files:<input type="text" name="autosupports_path" id="autosupports_path" placeholder=".../ddr/var/support" class="clr-input">
                     <p><div class="botonera" style="text-align:center"><button class="btn btn-primary" type="submit" id="btnvalidate">OK</button><button class="btn btn-primary" type="reset">CLEAR PATH</button></div></p>
                     </form>

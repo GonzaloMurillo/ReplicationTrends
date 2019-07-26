@@ -13,7 +13,7 @@
 
                   Please select the files that you want to include in the graphs:
 
-                    <form class="clr-form" action="{{ url_for('third_step') }}" method="post">
+                    <form class="clr-form" action="{{ url_for('third_step').strip('/') }}" method="post">
                         <input type="hidden" name="files_and_dates" value="{{files_and_dates_ld}}">
 
                       <table class="table">

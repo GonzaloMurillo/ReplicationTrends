@@ -4,12 +4,14 @@
 from flask import Flask, render_template, request
 from auxiliar import logparser
 from auxiliar import contexthelper
+from auxiliar import plotter
 import os
 import glob
 import gzip
 import re
 import json
 import ast
+import natsort
 
 app = Flask(__name__)
 
@@ -62,6 +64,8 @@ def second_step():
             autosupport_files.append(file)
     except Exception as e:
         print(e)
+
+    
   
     # If we do not find any autosupport file
     # Then we display an error message
@@ -69,7 +73,12 @@ def second_step():
     if(len(autosupport_files)==0):
         return(render_template('error.html',error_code="The specified path does not contain autosupport files. Please go back and specify a path containing autosupport files."))
         #raise Exception("No autosupport files")
- 
+    # We need to order the asup files, because if the number of asup files is high
+    # we can end up with a situation like this one: autosupport autosupport.1 autosupport.12 autosupport.2
+    # that autosupport.12 is clearly incorrect. I got lazy and found a module that makes this natsort
+    #https://stackoverflow.com/questions/33159106/sort-filenames-in-directory-in-ascending-order?lq=1
+    autosupport_files = natsort.natsorted(autosupport_files)
+
     # Now we need to open every file to obtain its generated date
     for index,f in enumerate(autosupport_files): 
         # The could be two types of autosupport files
@@ -94,7 +103,7 @@ def second_step():
         # Regular expression for catching the time in the autosupport log
         regexp = r'GENERATED_ON=.*' # We want to search for the GENERATED_ON, on the autosupport files.
         #regexp = r'[0-9][0-9]/[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]'
-
+        
         for line in file:
             
             matchObj = re.match(regexp, line)  # Does it match what we search at the start of the line?
@@ -111,15 +120,15 @@ def second_step():
                 break
         
 
-            # If after checking all the files, we have not found a GENERATED_ON line
-            # then we do know the date
-    if(not found):
-        files_and_dates["checkbox"] = os.path.basename(autosupport_files[index])
-        files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
-        files_and_dates["start_date"] = "UNKNOWN"
-        files_and_dates["path"] = autosupports_path
-        files_and_dates_ld.append(files_and_dates)
-        files_and_dates = {}  # Destroy the object, as we are going to use in the next bucle iteration
+        # If after checking all the lines, we have not found a GENERATED_ON line
+        # then we do know the date
+        if(not found):
+            files_and_dates["checkbox"] = "INVALID" # On the template, we will search for this field an uncheck the INVALIDS
+            files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
+            files_and_dates["start_date"] = "INVALID ASUP"
+            files_and_dates["path"] = autosupports_path
+            files_and_dates_ld.append(files_and_dates)
+            files_and_dates = {}  # Destroy the object, as we are going to use in the next bucle iteration
 
     # We render the Jinja Template
     return render_template('second_step.html',path = autosupports_path,autosupport_files = autosupport_files,files_and_dates_ld=files_and_dates_ld)
@@ -128,7 +137,7 @@ def second_step():
 
 @app.route("/third_step",methods=['GET', 'POST'])
 def third_step():
-    
+       
     # info_of_contexts_in_asups will be a list of lists, where each item on the list
     # will be all the information for an specific context in all the asups files analyzed
     # so info_of_contexts_in_asups[0] will for example contain all the information of one
@@ -179,9 +188,12 @@ def third_step():
     # [['1', '2,227,815,101', '371,596,567,439', '0', '0', '0.00', 'Wed Dec 5 01:00'], ['2', '4,833,505,928', '937,430,050,087', '0', '0', '0.00', 'Thu Nov 29 01:00'], ['3', '4,833,505,928', '82,860,672,773', '10,040,121,830', '151,923,216', '1.00', 'Thu Apr 18 01:00'], ['4', '2,227,815,101', '0', '2,208,978,412', '26,421,227', '1.00', 'Wed May 1 11:55']]
 
     contexts_dic_list=[]
-   
+
+    asup_number = 0 # number of asup being processed
+    graphs = [] # A list that will contain the name of all the graphs for each replication context
     # Now we need to search into the files selected, to obtain the Replication Data Transferred over 24 hours
     for autosupport in list_of_selected_asups:
+        asup_number = asup_number + 1 # To keep track later of the autosupport that we are processing, specially if is the latest
         # Just a call to the Constructor of the LogParser
         log_parser=logparser.LogParser(autosupport,'Replication Data Transferred over 24hr','Replication Detailed History')
         generated_on=log_parser.get_generated_on() # We obtain the GENERATED_ON string on the ASUP file
@@ -208,28 +220,90 @@ def third_step():
         # on this particular ASUP to context_dic_list
         # So context_dic_list will contain the replication information contained in all the selected ASUPs
         contexts_dic_list.append(contexts_dic) 
+
+
         
         # Because we iterate, we need to reset this two variables
         # to avoid messing it up
         list_of_contexts_in_asup=[] 
         contexts_dic={}
-        
+    # Here I have received the info from ALL autosupports    
     # Call to the constructor of ContextHelper
     log=contexthelper.ContextHelper()
     # Context by number is just a list that contains the contexts numbers in the asup files
     # TODO. What would happen if all the asups do not contain the same num of contexts?
     context_by_number=log.give_me_a_list_with_context_numbers(contexts_dic_list) 
-    
+    # replication_in_sync_estimation_without_ingest is how long it will take to replicate if we stop the ingest         
+    replication_in_sync_estimation_without_ingest = []
+
+    # replication_in_sync_wit_ingest is how long it will take to replicate if we DO NOT stop the ingest         
+  
+    replication_in_sync_estimation_with_ingest = []
     # Now for each context number
     for ctx_number in context_by_number:
+        
         # Here a lot of good things happen
         # info_of_contexts_in_asups will be a list of list
         # where each item is a list with all the info in all the asups for one specific context
         # we need to thank you to the function give_me_a_list_for_context
-        info_of_contexts_in_asups.append(log.give_me_a_list_for_context(ctx_number,contexts_dic_list))
+        list_for_context=log.give_me_a_list_for_context(ctx_number,contexts_dic_list)
+
+        # Now we create the plot for this context
+
+        graph=plotter.Plotter()
+        name_of_graph_file=graph.plot(list_for_context,ctx_number)
+        graphs.append(name_of_graph_file) # We add to the list of all graphs, this particular graph
+        # This is for calculating averages for each context
+       
+        calculated_averages=list(log.calculate_averages(list_for_context)) # This is a tuple converted to list
+        calculated_averages.insert(0,"AVERAGE")
+        calculated_averages.insert(1,"") # In the average this field is the context number, so we do not want to print anything
+        calculated_averages.insert(6,"") #Low bw opt, so we do not want to print anything
+        calculated_averages.insert(7,"") #Sync as of time, so we do not want to print anything
+
+        list_for_context.append(calculated_averages) # We add the average to the metrics
+       
+        info_of_contexts_in_asups.append(list_for_context) # We add all the info together for this context
     
+
+        # All the variables below are referred to the latest autosupport for the iterated context
+        pre_comp_written=int(list_for_context[0][2].replace(",","")) 
+        precomp_remaining=int(list_for_context[0][3].replace(",",""))
+        replicated_precomp=int(list_for_context[0][4].replace(",",""))
+        replicated_network=int(list_for_context[0][5].replace(",",""))
+        
+        
+        if(len(calculated_averages)==8): # if calculated_averages==8 it means that the context is initializing
+           
+            precomp_written_avg=int(calculated_averages[2].replace(",",""))
+            precomp_remaining_avg=int(calculated_averages[3].replace(",",""))
+            replicated_precomp_avg=int(calculated_averages[4].replace(",",""))
+            replicated_network_avg=int(calculated_averages[5].replace(",",""))
+            
+            if(precomp_remaining != 0):
+                # Just simply estimation considering there is no ingest 
+                # how_many_days = precomp_remaining / replicated_precomp_avg
+                if(replicated_precomp_avg > 0):
+                    how_many_hours=(precomp_remaining / replicated_precomp_avg ) *24
+                    replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this content will take {:.2f} hours to be in sync (based on the average metrics).".format(how_many_hours))
+                elif (replicated_precomp_avg == 0 and precomp_remaining > 0):
+                    replication_in_sync_estimation_without_ingest.append("Without new pre-comp ingest (stopping the backup writting to this mtree): this replication context will probably never be in sync, as we do not replicate data.")
+                
+                 # What happens if we consider the ingest backup
+                 # how_many_hours=(Precomp remaining in KBi+AvgPrecomp written in KBi (last 24 h) ) / Replicated Precomp
+               
+                if(replicated_precomp_avg > 0 ):
+                    how_many_hours = ((precomp_remaining + precomp_written_avg) / replicated_precomp_avg ) *24
+                    replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this content will take {:.2f} hours to be in sync (based on the average metrics).".format(how_many_hours))
+                elif (replicated_precomp_avg==0 and precomp_remaining > 0): # It is not replicating anything
+                     replication_in_sync_estimation_with_ingest.append("With new pre-comp ingest (non stopping the backup writting to this mtree): this replication context will probably never be in sync, as we do not replicate data.")
+
+            else: # pre-comp remaining is 0
+                replication_in_sync_estimation_without_ingest.append("This replication context is in sync")
+                replication_in_sync_estimation_with_ingest.append("This replication context is in sync")
+
    # And here we print the third_step template
-    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups))
+    return(render_template("third_step.html",info_of_contexts_in_asups=info_of_contexts_in_asups,replication_in_sync_estimation_without_ingest=replication_in_sync_estimation_without_ingest,replication_in_sync_estimation_with_ingest=replication_in_sync_estimation_with_ingest,graphs=graphs))
 
 if(__name__== "__main__"):
     app.run(debug=True)

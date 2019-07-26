@@ -5,7 +5,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <strong>Replication Graphs</strong>
+                    <strong>Replication Trends | Found autosupport files</strong>
                 </div>
                 <div class="card-block">
 
@@ -33,7 +33,12 @@
 
                   {% for key, value in dict_item.items() %}  <!-- one data cell for each pair key / value !-->
                   {% if key == "checkbox" %}
+                  {% if 'INVALID' in value %}
+                  <td><input type="checkbox" name="{{value}}" value="{{value}}"></td>
+                  
+                  {% else %}
                   <td><input type="checkbox" name="{{value}}" value="{{value}}"checked></td>
+                  {% endif %}
                   {% endif %}
 
                   {% if key == "name_of_file" %}

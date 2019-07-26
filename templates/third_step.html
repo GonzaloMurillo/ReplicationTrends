@@ -21,8 +21,8 @@
                       
           
           {% if info_of_contexts_in_asups|length == 0 %}
-          <h4>There is no information about replication on the provided ASUP files.</h4>
-          <h4>Is replication configured in the provided autosupports files?</h4>
+          <h4>There is no consistent information about replication contexts on the provided ASUP files.</h4>
+          <h4>All autosupport files selected need to contain information about the same replication contexts.</h4>
           {% endif %}
           
               {% for lista_actual in info_of_contexts_in_asups %}
@@ -74,88 +74,71 @@
                   </tbody>
                 </table>
                 {% if loop.index0 == 0 %}
+                <img src="static/{{graphs.0}}.png" width="100%">
                 
-                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.0 %}
+                {% if 'will never be in sync' in  replication_in_sync_estimation_without_ingest.0 %}
                 <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.0 }}</strong></p>
                 {% else %}
                 <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.0 }}</strong></p>
                 {% endif %}
-                <img src="static/{{graphs.0}}.png" width="100%">
-                <br>
-                
-                {% if 'Warning' in  replication_in_sync_estimation_with_ingest.0 %}
+                              
+                {% if 'will never be in sync' in  replication_in_sync_estimation_with_ingest.0 %}
                 <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.0 }}</strong></p>
                 {% else %}
                 <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.0 }}</strong></p>
                 {% endif %}
-                <img src="static/{{graphs.0}}.png" width="100%">
-                <br>
-
-
                 {% endif %}
 
                 {% if loop.index0 == 1 %}
+                <img src="static/{{graphs.1}}.png" width="100%">
                 
-                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.1 %}
+                {% if 'will never be in sync' in  replication_in_sync_estimation_without_ingest.1 %}
                 <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.1 }}</strong></p>
                 {% else %}
                 <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.1 }}</strong></p>
                 {% endif %}
-                <img src="static/{{graphs.1}}.png" width="100%">
-                <br>
+                              
+                {% if 'will never be in sync' in  replication_in_sync_estimation_with_ingest.1 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.1 }}</strong></p>
+                {% else %}
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.1 }}</strong></p>
+                {% endif %}
                 {% endif %}
 
                 {% if loop.index0 == 2 %}
+                <img src="static/{{graphs.2}}.png" width="100%">
                 
-                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.2 %}
+                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.2 %}
                 <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.2 }}</strong></p>
                 {% else %}
                 <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.2 }}</strong></p>
                 {% endif %}
-                <img src="static/{{graphs.2}}.png" width="100%">
-                <br>
+                              
+                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.2 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.2 }}</strong></p>
+                {% else %}
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.2 }}</strong></p>
+                {% endif %}
                 {% endif %}
 
                 {% if loop.index0 == 3 %}
+                <img src="static/{{graphs.3}}.png" width="100%">
                 
-                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.3 %}
+                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.3 %}
                 <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.3 }}</strong></p>
                 {% else %}
                 <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.3 }}</strong></p>
                 {% endif %}
-                <img src="static/{{graphs.3}}.png" width="100%">
-                <br>
-                {% endif %}
-
-                {% if loop.index0 == 4 %}
-                
-                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.4 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.4 }}</strong></p>
+                              
+                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.3 %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.3 }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.4 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.3 }}</strong></p>
                 {% endif %}
-                <img src="static/{{graphs.4}}.png" width="100%">
-                <br>
                 {% endif %}
-
-                {% if loop.index0 == 5 %}
-                
-                {% if 'Warning' in  replication_in_sync_estimation_without_ingest.5 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.5 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.5 }}</strong></p>
-                {% endif %}
-                <img src="static/{{graphs.5}}.png" width="100%">
-                <br>
-                {% endif %}
-
 
                 
-
                 
-
-
-
               {% endfor %}
                     
 

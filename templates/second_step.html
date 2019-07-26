@@ -33,7 +33,12 @@
 
                   {% for key, value in dict_item.items() %}  <!-- one data cell for each pair key / value !-->
                   {% if key == "checkbox" %}
+                  {% if 'INVALID' in value %}
+                  <td><input type="checkbox" name="{{value}}" value="{{value}}"></td>
+                  
+                  {% else %}
                   <td><input type="checkbox" name="{{value}}" value="{{value}}"checked></td>
+                  {% endif %}
                   {% endif %}
 
                   {% if key == "name_of_file" %}

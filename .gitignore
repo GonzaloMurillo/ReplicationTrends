@@ -1,2 +1,6 @@
 static/Grap*
 ddfs_examples/ddfs*
+ve
+__pycache__/
+*.py[cod]
+*$py.class

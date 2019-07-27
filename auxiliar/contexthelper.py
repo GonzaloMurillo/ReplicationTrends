@@ -21,7 +21,7 @@ class ContextHelper():
                         details_copy=list(details)
                         details_copy.insert(0,generated_on)
                         requested_context.append(details_copy)
-        print("voy a retornar {}".format(requested_context))
+        #print("voy a retornar {}".format(requested_context))
         return requested_context
 
     def give_me_a_list_with_context_numbers(self,context_dic_list): # Returns a list with the context numbers:
@@ -30,7 +30,7 @@ class ContextHelper():
         for key,value in context_dic_list[0].items():
             if key == 'DETAILS':
                 for i in value:
-                    print("lo que tengo {}".format(i))
+                    #print("lo que tengo {}".format(i))
                     context_numbers.append(i[0])
         return context_numbers
 

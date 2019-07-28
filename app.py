@@ -5,6 +5,11 @@ from flask import Flask, render_template, request
 from auxiliar import logparser
 from auxiliar import contexthelper
 from auxiliar import plotter
+from auxiliar import exceptions
+from auxiliar.exceptions import AsupFilesEmpty
+from auxiliar.exceptions import NotStartToken
+from auxiliar.exceptions import FirstAsupNoContexts
+from werkzeug.exceptions import HTTPException
 import os
 import glob
 import gzip
@@ -12,8 +17,37 @@ import re
 import json
 import ast
 import natsort
+import werkzeug
 
 app = Flask(__name__)
+
+# Registering some tailor made exceptions
+
+# Exceptions
+# https://stackoverflow.com/questions/44115100/python-3-raise-statement
+# https://stackoverflow.com/questions/28076503/catch-an-exception-and-displaying-a-custom-error-page
+
+@app.errorhandler(AsupFilesEmpty)
+def handle_asup_files_empty(e):
+    return render_template('error.html', error_code="Error: You have not selected any ASUP file to be processed. Please select at list one file")
+
+
+@app.errorhandler(NotStartToken)
+def handle_non_start_token(e):
+    return render_template('error.html', error_code="Error: We have tried to find in one autosupport file the \"Replication Data\", but is missing")
+
+
+@app.errorhandler(FirstAsupNoContexts)
+def handle_non_start_token(e):
+    return render_template('error.html', error_code="Error: The first selected ASUP, has no replication contexts defined. Please uncheck it and try again.")
+
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    code = 500
+    if isinstance(e, HTTPException):
+        code = e.code
+    return render_template('error.html',error_code="Warning! An unexpected error has occured")
 
 # FIRST STEP OF THE APP WIZARD 
 @app.route("/",methods=['GET', 'POST'])
@@ -85,7 +119,8 @@ def second_step():
         # normal files and compressed files .gz
         # We need to detect both of them and proceed
 
-        found=False # For each file we set found = False
+        found_generated_on=False # For each file we set found = False
+        found_replication_data_transferred=False # If it does not contain "Replication Data Transferred over 24hr" is neither valid
         if ".gz" in f:  # gzipped version of autosupport file
             opener = gzip.open # This is a nice trick
         else:
@@ -102,28 +137,37 @@ def second_step():
         # We gather the required info using Regular Expressions
         # Regular expression for catching the time in the autosupport log
         regexp = r'GENERATED_ON=.*' # We want to search for the GENERATED_ON, on the autosupport files.
+        regexp2 = r'Replication Data Transferred over 24hr'
         #regexp = r'[0-9][0-9]/[0-9][0-9] [0-9][0-9]:[0-9][0-9]:[0-9][0-9]'
         
         for line in file:
             
             matchObj = re.match(regexp, line)  # Does it match what we search at the start of the line?
+            
             if matchObj:
-                # Add to the dictionary the name of the file and line
-                files_and_dates["checkbox"] = os.path.basename(autosupport_files[index])
-                files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
-                files_and_dates["start_date"] = matchObj.group()
-                files_and_dates["start_date"]  = files_and_dates["start_date"].split("=")[1] # We just need the date, not the "GENERATED ON" string
-                files_and_dates["path"] = autosupports_path
-                files_and_dates_ld.append(files_and_dates)
-                files_and_dates={} #  new reference in memory
-                found=True
-                break
+                found_generated_on=True # We have found the GENERATED_ON, but does it also have REPLICATION DATA last 24 hrs?
+
+                for line2 in file:
+                    matchObj2 = re.match(regexp2,line2)
+                    if matchObj2:
+                        # Add to the dictionary the name of the file and line
+                        files_and_dates["checkbox"] = os.path.basename(autosupport_files[index])
+                        files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
+                        files_and_dates["start_date"] = matchObj.group()
+                        files_and_dates["start_date"]  = files_and_dates["start_date"].split("=")[1] # We just need the date, not the "GENERATED ON" string
+                        files_and_dates["path"] = autosupports_path
+                        files_and_dates_ld.append(files_and_dates)
+                        files_and_dates={} #  new reference in memory
+                        found_replication_data_transferred=True
+                        # This is a valid ASUP
+                        break
         
 
-        # If after checking all the lines, we have not found a GENERATED_ON line
-        # then we do know the date
-        if(not found):
-            files_and_dates["checkbox"] = "INVALID" # On the template, we will search for this field an uncheck the INVALIDS
+        # If after checking all the lines, we have not found a GENERATED_ON, 
+        # Replication Data Transferred over 24hr then it is an invalid ASUP and 
+        # must be unchecked
+        if(not found_generated_on or not found_replication_data_transferred):
+            files_and_dates["checkbox"] = "INVALID ASUP" # On the template, we will search for this field an uncheck the INVALIDS
             files_and_dates["name_of_file"] = os.path.basename(autosupport_files[index])
             files_and_dates["start_date"] = "INVALID ASUP"
             files_and_dates["path"] = autosupports_path

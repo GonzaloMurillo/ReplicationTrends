@@ -1,4 +1,6 @@
 import locale
+from auxiliar import exceptions
+
 
 class ContextHelper():
 
@@ -26,12 +28,16 @@ class ContextHelper():
 
     def give_me_a_list_with_context_numbers(self,context_dic_list): # Returns a list with the context numbers:
         
+        if len(context_dic_list)==0:
+           raise exceptions.AsupFilesEmpty("The asup files list is empty")
         context_numbers=[]
-        for key,value in context_dic_list[0].items():
+        for key,value in context_dic_list[0].items(): # There was a BUG, if the first file does not contain replication context, as we obtain the number of replication contexts from there, it fails.
             if key == 'DETAILS':
                 for i in value:
                     #print("lo que tengo {}".format(i))
                     context_numbers.append(i[0])
+        if len(context_numbers)==0:
+             raise exceptions.FirstAsupNoContexts()
         return context_numbers
 
     def calculate_averages(self,list_for_context):

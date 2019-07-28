@@ -6,6 +6,7 @@
 
 
         {% block content %}
+        
         <div class="clr-col-lg-11">
 
             <div class="card">
@@ -73,183 +74,22 @@
               
                   </tbody>
                 </table>
-                {% if loop.index0 == 0 %}
-                <img src="static/{{graphs.0}}.png" width="100%">
                 
-                {% if 'will never be in sync' in  replication_in_sync_estimation_without_ingest.0 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.0 }}</strong></p>
+                <img src="static/{{graphs[loop.index0]}}.png" width="100%">
+                
+                {% if 'will never be in sync' in  replication_in_sync_estimation_without_ingest[loop.index0] %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest[loop.index0] }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.0 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest[loop.index0]}}</strong></p>
                 {% endif %}
                               
-                {% if 'will never be in sync' in  replication_in_sync_estimation_with_ingest.0 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.0 }}</strong></p>
+                {% if 'will never be in sync' in  replication_in_sync_estimation_with_ingest[contador] %}
+                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest[loop.index0] }}</strong></p>
                 {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.0 }}</strong></p>
+                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest[loop.index0]}}</strong></p>
                 {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 1 %}
-                <img src="static/{{graphs.1}}.png" width="100%">
                 
-                {% if 'will never be in sync' in  replication_in_sync_estimation_without_ingest.1 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.1 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.1 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in  replication_in_sync_estimation_with_ingest.1 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.1 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.1 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 2 %}
-                <img src="static/{{graphs.2}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.2 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.2 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.2 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.2 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.2 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.2 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 3 %}
-                <img src="static/{{graphs.3}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.3 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.3 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.3 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.3 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.3 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.3 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 4 %}
-                <img src="static/{{graphs.4}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.4 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.4 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.4 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.4 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.4 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.4 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-
-                {% if loop.index0 == 5 %}
-                <img src="static/{{graphs.5}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.5 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.5 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.5 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.4 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.5 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.5 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 6 %}
-                <img src="static/{{graphs.6}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.6 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.6 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.6 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.6 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.6 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.6 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 7 %}
-                <img src="static/{{graphs.7}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.7 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.7 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.7 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.7 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.7 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.7 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-
-                {% if loop.index0 == 8 %}
-                <img src="static/{{graphs.8}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.8 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.8 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.8 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.8 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.8 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.8 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 9 %}
-                <img src="static/{{graphs.4}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.9 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.9 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.9 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.9 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.9 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.9 }}</strong></p>
-                {% endif %}
-                {% endif %}
-
-                {% if loop.index0 == 10 %}
-                <img src="static/{{graphs.10}}.png" width="100%">
-                
-                {% if 'will never be in sync' in replication_in_sync_estimation_without_ingest.10 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.10 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_without_ingest.10 }}</strong></p>
-                {% endif %}
-                              
-                {% if 'will never be in sync' in replication_in_sync_estimation_with_ingest.10 %}
-                <strong><p style="border:3px; border-style:solid; border-color:#FF0000; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.10 }}</strong></p>
-                {% else %}
-                <strong><p style="border:3px; border-style:solid; border-color:#99CCFF; padding: 1em;"> {{ replication_in_sync_estimation_with_ingest.10 }}</strong></p>
-                {% endif %}
-                {% endif %}
+              
 
 
                 

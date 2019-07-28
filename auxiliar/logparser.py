@@ -1,4 +1,3 @@
-
 class LogParser():
     
     def __init__(self,file_name,start_string,stop_string):
@@ -16,28 +15,36 @@ class LogParser():
             An string with the serial obtained from the autosupport
 
         """
-        with open(self.file_name) as f:
-            for autosupport_read_line in f: 
-                if(len(autosupport_read_line)!=0): # If the line is empty we discard it
-                    if "GENERATED_ON=" in autosupport_read_line:
+        try:
+            with open(self.file_name) as f:
+                for autosupport_read_line in f: 
+                    if(len(autosupport_read_line)!=0): # If the line is empty we discard it
+                        if "GENERATED_ON=" in autosupport_read_line:
 
-                        splitted_generated=autosupport_read_line.split("=") # We get just the date and not the string GENERATED_ON
-                        date_time_str_splitted=splitted_generated[1].split() # We split the part that is the date, because we do not want time zone (simplification) is really weird if they change timezone from one autosupport to the other
-                        date_time_str_aux=date_time_str_splitted[0]+" "+date_time_str_splitted[1]+" "+date_time_str_splitted[2]+" "+date_time_str_splitted[5]+" "+date_time_str_splitted[3] # We build something that can be understood by the frontend
-                        return date_time_str_aux
-
+                            splitted_generated=autosupport_read_line.split("=") # We get just the date and not the string GENERATED_ON
+                            date_time_str_splitted=splitted_generated[1].split() # We split the part that is the date, because we do not want time zone (simplification) is really weird if they change timezone from one autosupport to the other
+                            date_time_str_aux=date_time_str_splitted[0]+" "+date_time_str_splitted[1]+" "+date_time_str_splitted[2]+" "+date_time_str_splitted[5]+" "+date_time_str_splitted[3] # We build something that can be understood by the frontend
+                            return date_time_str_aux
+        except Exception as e:
+            print (e)
+            exit  
 
     def search_and_return(self):
-       with open(self.file_name) as file:
-         start_token = next(l for l in file if l.strip()==self.start_string) # Used to read until the start token
-         result = [line for line in iter(lambda x=file: next(x).strip(), self.stop_string) if line]
-         return result
+        try:
 
+            with open(self.file_name) as file:
+                start_token = next(l for l in file if l.strip()==self.start_string) # Used to read until the start token
+                result = [line for line in iter(lambda x=file: next(x).strip(), self.stop_string) if line]
+                return result
+        except Exception as e:
+              raise exceptions.NotStartToken()
+        print("result")
+    
     
     def extract_contexts(self,replication_data):
         if(len(replication_data)==0 or "**** No replication history available" in replication_data[1]):
             print("Warning:This autosuport contains no info about replication. Discarted")
-         
+            
         
         contexts=[]
         contexts_by_columns=[]

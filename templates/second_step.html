@@ -34,7 +34,7 @@
                   {% for key, value in dict_item.items() %}  <!-- one data cell for each pair key / value !-->
                   {% if key == "checkbox" %}
                   {% if 'INVALID' in value %}
-                  <td><input type="checkbox" name="{{value}}" value="{{value}}"></td>
+                  <td>{{ value}}</td> <!--If not a valid asup, we do not allow to select it-->
                   
                   {% else %}
                   <td><input type="checkbox" name="{{value}}" value="{{value}}"checked></td>

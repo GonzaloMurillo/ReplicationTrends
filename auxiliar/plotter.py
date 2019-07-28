@@ -52,10 +52,10 @@ class Plotter:
         
         plt.grid() 
         plt.suptitle("Replication Context:"+ctx_number)
-        plt.plot(precomp_written,label = 'Precomp Written')
-        plt.plot(precomp_remaining,label = 'Precomp Remaining')
-        plt.plot(replicated_precomp,label = 'Replicated Precomp')
-        plt.plot(network_usage,label = 'Network used for Repl')
+        plt.plot(precomp_written,'.-',label = 'Precomp Written')
+        plt.plot(precomp_remaining,'.-',label = 'Precomp Remaining')
+        plt.plot(replicated_precomp,'.-',label = 'Replicated Precomp')
+        plt.plot(network_usage,'.-',label = 'Network used for Repl')
         plt.legend(loc = 'best')
         plt.xticks(np.arange(len(dates)), dates,size="small", color = 'b', rotation = 45 ) # We write the x 
         plt.ylabel('GBi',size="small")

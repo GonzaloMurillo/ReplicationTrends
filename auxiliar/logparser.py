@@ -43,8 +43,14 @@ class LogParser():
         contexts_by_columns=[]
         data_to_plot=[]
         #print("Received {}".format(replication_data))
-        for i in range(5,len(replication_data)-2):# Real info of the contexts start in line 5 and is 2 lines less that what we read (removing --- and cumulative from the end)
-            contexts.append(replication_data[i])
+        # If there is only one context, we do not have the sum column, so we 
+        # need to go from range(5,len(replication,data)-1), instead of range(5,len(replication_data)-2)
+        if(len(replication_data)==7): # Just one replication context, no (sum) column
+            for i in range(5,len(replication_data)-1):
+                contexts.append(replication_data[i])              
+        else:
+            for i in range(5,len(replication_data)-2):# Real info of the contexts start in line 5 and is 2 lines less that what we read (removing --- and cumulative from the end)
+                contexts.append(replication_data[i])
         #print("Contexts now {}".format(contexts))
         for i in range(0,len(contexts)):
             contexts_by_columns.append(contexts[i].split()) # We split by space to have columns

@@ -41,14 +41,14 @@ def handle_non_start_token(e):
 def handle_non_start_token(e):
     return render_template('error.html', error_code="Error: The first selected ASUP, has no replication contexts defined. Please uncheck it and try again.")
 
-
+"""
 @app.errorhandler(Exception)
 def handle_error(e):
     code = 500
     if isinstance(e, HTTPException):
         code = e.code
     return render_template('error.html',error_code="Warning! An unexpected error has occured")
-
+"""
 # FIRST STEP OF THE APP WIZARD 
 @app.route("/",methods=['GET', 'POST'])
 def index():
@@ -239,7 +239,8 @@ def third_step():
     for autosupport in list_of_selected_asups:
         asup_number = asup_number + 1 # To keep track later of the autosupport that we are processing, specially if is the latest
         # Just a call to the Constructor of the LogParser
-        log_parser=logparser.LogParser(autosupport,'Replication Data Transferred over 24hr','Replication Detailed History')
+        end_tokens=['Replication Detailed History','Replication History']
+        log_parser=logparser.LogParser(autosupport,'Replication Data Transferred over 24hr',end_tokens) # In older versions of DDOS, the end string is Replication History rather than Replication Detailed History
         generated_on=log_parser.get_generated_on() # We obtain the GENERATED_ON string on the ASUP file
         replication_data=log_parser.search_and_return() # We obtain the replication data on the ASUP, in pure text
 

@@ -1,9 +1,9 @@
 class LogParser():
     
-    def __init__(self,file_name,start_string,stop_string):
+    def __init__(self,file_name,start_string,end_tokens):
         self.file_name=file_name
         self.start_string=start_string
-        self.stop_string=stop_string
+        self.stop_strings=end_tokens
     
     def get_generated_on(self):
         """Returns the GENERATED_ON date contained in the autosupport
@@ -29,18 +29,22 @@ class LogParser():
             print (e)
             exit  
 
-    def search_and_return(self):
-        try:
+    def search_and_return(self):        
+        with open(self.file_name) as file:
+            iterator = iter(file)
+            for line in iterator:
+                if line.strip() == self.start_string:
+                    break
 
-            with open(self.file_name) as file:
-                start_token = next(l for l in file if l.strip()==self.start_string) # Used to read until the start token
-                result = [line for line in iter(lambda x=file: next(x).strip(), self.stop_string) if line]
-                return result
-        except Exception as e:
-              raise exceptions.NotStartToken()
-        print("result")
-    
-    
+            result = []
+            for line in iterator:
+                result.append(line.strip())
+                if line.strip() in self.stop_strings:
+                    result = result[:-2] # We just do not want the latest 2 lines
+                    break
+        return result
+
+
     def extract_contexts(self,replication_data):
         if(len(replication_data)==0 or "**** No replication history available" in replication_data[1]):
             print("Warning:This autosuport contains no info about replication. Discarted")

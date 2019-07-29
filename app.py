@@ -41,14 +41,14 @@ def handle_non_start_token(e):
 def handle_non_start_token(e):
     return render_template('error.html', error_code="Error: The first selected ASUP, has no replication contexts defined. Please uncheck it and try again.")
 
-"""
+
 @app.errorhandler(Exception)
 def handle_error(e):
     code = 500
     if isinstance(e, HTTPException):
         code = e.code
     return render_template('error.html',error_code="Warning! An unexpected error has occured")
-"""
+
 # FIRST STEP OF THE APP WIZARD 
 @app.route("/",methods=['GET', 'POST'])
 def index():
